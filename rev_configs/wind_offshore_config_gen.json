@@ -1,0 +1,24 @@
+{
+  "analysis_years": [
+    1981
+  ],
+  "log_directory": "./logs/",
+  "execution_control": {
+    "nodes": 48,
+    "option": "awspc",
+    "max_workers": 1,
+    "walltime" : 4,
+    "allocation" : "compute"
+  },
+  "log_level": "INFO",
+  "output_request": [
+    "cf_profile",
+    "gen_profile"
+  ],
+  "project_points": "/shared/renewable-profiles/rev_configs/wind_d03_offshore_projectpoints.csv",
+  "resource_file": "",
+  "sam_files": {
+    "def": "/shared/renewable-profiles/rev_configs/offshore_windturbines_d03.json"
+  },
+  "technology": "windpower"
+}

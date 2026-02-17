@@ -1,0 +1,24 @@
+{
+  "analysis_years": [
+    1981
+  ],
+  "log_directory": "./logs/",
+  "execution_control": {
+    "nodes": 96,
+    "option": "awspc",
+    "max_workers": 1,
+    "walltime" : 12,
+    "allocation" : "compute"
+  },
+  "log_level": "INFO",
+  "output_request": [
+    "cf_profile",
+    "gen_profile"
+  ],
+  "project_points": "/shared/renewable-profiles/rev_configs/pv_d01_distributed_projectpoints.csv",
+  "resource_file": "/shared/data/resource/pv/EC-Earth3/EC-Earth3_d01_pv_resource_1981.h5",
+  "sam_files": {
+    "def": "/shared/renewable-profiles/rev_configs/distributed_pvwattsv8.json"
+  },
+  "technology": "pvwattsv8"
+}

@@ -1,0 +1,15 @@
+{
+  "adjust:constant": 0,
+  "array_type": 2,
+  "azimuth": 180,
+  "compute_module": "pvwattsv8",
+  "dc_ac_ratio": 1.3,
+  "gcr": 0.4,
+  "inv_eff": 96,
+  "module_type": 0,
+  "system_capacity": 100000,
+  "tilt": 0.0,
+  "losses": 0,
+  "use_wf_albedo": 1,
+  "en_snow_loss": 1
+  }

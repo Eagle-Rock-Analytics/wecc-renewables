@@ -1,0 +1,14 @@
+{
+  "logging": {
+    "log_file": null,
+    "log_level": "INFO"
+  },
+  "pipeline": [
+    {
+      "generation": "./wind_onshore_config_gen.json"
+    },
+    {
+      "collect": "./wind_onshore_config_collect.json"
+    }
+  ]
+}

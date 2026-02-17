@@ -1,0 +1,19 @@
+{
+  "collect_pattern": "PIPELINE",
+  "dsets": [
+    "cf_profile",
+    "annual_energy",
+    "gen_profile",
+    "ac",
+    "dc",
+    "clipped_power"
+  ],
+  "execution_control": {
+    "option": "awspc",
+    "walltime": 4,
+    "allocation" : "compute"
+  },
+  "log_directory": "./logs/",
+  "log_level": "INFO",
+  "project_points": "/shared/renewable-profiles/rev_configs/pv_d01_distributed_projectpoints.csv"
+}

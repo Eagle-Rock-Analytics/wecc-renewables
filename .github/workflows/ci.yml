@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop, restructure ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Miniforge
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        miniforge-variant: Miniforge3
+        python-version: "3.9"
+        use-mamba: true
+        activate-environment: renewable-profiles
+        environment-file: environment.yml
+
+    - name: Install package
+      shell: bash -el {0}
+      run: |
+        pip install . pytest-xdist
+
+    - name: Run pre-commit hooks
+      shell: bash -el {0}
+      run: |
+        pre-commit run --all-files
+
+    - name: Run tests with coverage
+      shell: bash -el {0}
+      run: |
+        python -m pytest -n auto --cov=src --cov-report=xml --cov-report=term-missing
+
+    # - name: Upload coverage reports
+    #   uses: codecov/codecov-action@v4
+    #   with:
+    #     file: ./coverage.xml
+    #     fail_ci_if_error: true
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.9"
+
+    - name: Install security tools
+      run: |
+        pip install bandit[toml] detect-secrets
+
+    - name: Run Bandit security scan
+      run: |
+        bandit -r src/ -f json -o bandit-report.json || true
+
+    - name: Run detect-secrets
+      run: |
+        detect-secrets scan --baseline .secrets.baseline
+
+    - name: Upload security artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json

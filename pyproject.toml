@@ -1,0 +1,210 @@
+[build-system]
+requires = ["setuptools<60", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "renewable-profiles"
+version = "0.1.0"
+description = "ERA development of renewable energy profiles"
+authors = [
+    {name = "Beth McClenny", email = "beth@eaglerockanalytics.com"},
+    {name = "Héctor A. Inda-Díaz", email = "hector@eaglerockanalytics.com"},
+    {name = "Neil Schroeder", email = "neil.schroeder@eaglerockanalytics.com"},
+    {name = "Nicole Keeney", email = "nicole.keeney@eaglerockanalytics.com"},
+]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+]
+requires-python = ">=3.9,<3.10"
+dependencies = [
+    "pandas>=2.0.0",
+    "matplotlib>=3.7.0",
+    "jupyter>=1.0.0",
+    "ipykernel>=6.0.0",
+    "aiohttp",
+    "bokeh",
+    "dask",
+    "h5netcdf",
+    "holoviews",
+    "hvplot",
+    "intake",
+    "intake-esm",
+    "intake-xarray",
+    "jupyterlab",
+    "mpich",
+    "mpi4py",
+    "nbgitpuller",
+    "netcdf4",
+    "pandas",
+    "proj",
+    "pydantic",
+    "pyproj",
+    "pytables",
+    "requests",
+    "rioxarray",
+    "scikit-learn",
+    "scipy",
+    "statsmodels",
+    "tqdm",
+    "xarray",
+    "xclim",
+    "wrf-python",
+    "zarr",
+    "aiobotocore",
+    "aioboto3",
+    "basemap",
+    "geopandas",
+    "dask-geopandas",
+    "kerchunk",
+    "simplempi",
+    "pint",
+    "pyogrio",
+    "NREL-rex",
+    "numpy==1.26.4",
+    "s3fs",
+    "tables",
+    "ypy-websocket"
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "isort>=5.12.0",
+    "pre-commit>=3.0.0",
+    "detect-secrets>=1.4.0",
+    "nbqa>=1.7.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+docs = [
+    "sphinx>=5.0.0",
+    "sphinx-rtd-theme>=1.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Eagle-Rock-Analytics/renewable-profiles"
+Repository = "https://github.com/Eagle-Rock-Analytics/renewable-profiles"
+Documentation = "https://github.com/Eagle-Rock-Analytics/renewable-profiles#readme"
+Issues = "https://github.com/Eagle-Rock-Analytics/renewable-profiles/issues"
+
+[tool.setuptools_scm]
+write_to = "src/_version.py"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+lint.select = [
+    "A",   # avoid shadowing builtins
+    "B",   # flake8-bugbear
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8 naming conventions
+    "W",   # pycodestyle warnings
+    "C4",  # flake8-comprehensions
+    "PD",  # pandas best practices
+    "UP",  # pyupgrade
+    "ARG", # unused arguments
+    "SIM", # simplification
+]
+lint.ignore = [
+    "E501",   # line too long, handled by black
+    "B008",   # do not perform function calls in argument defaults
+    "C901",   # too complex
+    "N802",   # function name should be lowercase
+    "N806",   # variable name should be lowercase
+    "N999",   # module name should be lowercase
+    "PD011",  # pivot vs unstack ignore
+    "PD013",  # melt vs stack ignore
+    "PD010",  # pivot_table vs stack ignore
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**/*" = ["S101", "ARG", "FBT"]
+"src/_version.py" = ["ALL"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--strict-markers",
+    "--strict-config",
+    "--disable-warnings",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/_version.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
