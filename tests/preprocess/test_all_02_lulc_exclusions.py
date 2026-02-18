@@ -474,34 +474,6 @@ class TestLulcExclusions:
         with pytest.raises(OSError):
             add_landuse_landcover_exclusions("d03", "urban")
 
-    def test_get_single_timestep_function(self):
-        """Test the internal get_single_timestep function behavior."""
-        # Create multi-timestep dataset
-        multi_time_ds = xr.Dataset(
-            {
-                "var": (["time", "y", "x"], np.random.rand(3, 5, 4)),
-            },
-            coords={
-                "time": pd.date_range("2020-01-01", periods=3, freq="D"),
-                "y": np.arange(5),
-                "x": np.arange(4),
-            },
-        )
-
-        # Simulate what get_single_timestep should do
-        single_time_ds = multi_time_ds.isel(time=0).squeeze()
-
-        # Should have no time dimension
-        assert "time" not in single_time_ds.dims
-
-        # Should preserve other dimensions
-        assert "y" in single_time_ds.dims
-        assert "x" in single_time_ds.dims
-
-        # Should preserve data
-        expected_data = multi_time_ds["var"].isel(time=0).squeeze()
-        np.testing.assert_array_equal(single_time_ds["var"], expected_data)
-
     @patch("src.preprocess.all_02_lulc_exclusions.intake.open_esm_datastore")
     @patch("src.preprocess.all_02_lulc_exclusions.make_exclusions_mask")
     @patch("src.preprocess.all_02_lulc_exclusions.ds_to_zarr")
