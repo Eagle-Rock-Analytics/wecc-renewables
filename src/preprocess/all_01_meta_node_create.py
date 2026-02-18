@@ -21,6 +21,30 @@ from src.ds_to_h5 import (
 from src.utils import ds_to_zarr, upload_file
 
 
+# Define a preprocess function to select one time step
+def get_single_timestep(
+    ds: Union[xr.Dataset, xr.DataArray],
+) -> Union[xr.Dataset, xr.DataArray]:
+    """
+    Selects and returns the first time step of an xarray Dataset or DataArray.
+
+    The time dimension is removed via squeezing if it has size one.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset or xarray.DataArray
+        Input Dataset or DataArray containing a 'time' dimension.
+
+    Returns
+    -------
+    xarray.Dataset or xarray.DataArray
+        A copy of the input with only the first time step selected and
+        singleton dimensions removed.
+    """
+    ds = ds.copy()
+    return ds.isel(time=0).squeeze()
+
+
 def spatial_h5_make(domain: str) -> None:
     """
     Create spatial metadata HDF5 file for a given domain.
@@ -37,29 +61,6 @@ def spatial_h5_make(domain: str) -> None:
     """
     # Open catalog of available data sets using intake-esm package
     # we only need one sample dataset, one time step for this
-
-    # Define a preprocess function to select one time step
-    def get_single_timestep(
-        ds: Union[xr.Dataset, xr.DataArray],
-    ) -> Union[xr.Dataset, xr.DataArray]:
-        """
-        Selects and returns the first time step of an xarray Dataset or DataArray.
-
-        The time dimension is removed via squeezing if it has size one.
-
-        Parameters
-        ----------
-        ds : xarray.Dataset or xarray.DataArray
-            Input Dataset or DataArray containing a 'time' dimension.
-
-        Returns
-        -------
-        xarray.Dataset or xarray.DataArray
-            A copy of the input with only the first time step selected and
-            singleton dimensions removed.
-        """
-        ds = ds.copy()
-        return ds.isel(time=0).squeeze()
 
     cat = intake.open_esm_datastore(
         "https://cadcat.s3.amazonaws.com/cae-collection.json"
